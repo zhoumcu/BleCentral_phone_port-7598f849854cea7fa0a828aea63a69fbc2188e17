@@ -42,8 +42,7 @@ public class LoadingDialog extends Dialog {
         tvCount = (TextView) findViewById(R.id.tv_count);
         bg_ground = (LinearLayout)findViewById(R.id.bg_ground);
     }
-    public void setBackgroundColor()
-    {
+    public void setBackgroundColor() {
         mTextView.setTextColor(getContext().getResources().getColor(R.color.black));
         bg_ground.setBackground(getContext().getResources().getDrawable(R.drawable.bg_shape_white));
     }
@@ -51,8 +50,7 @@ public class LoadingDialog extends Dialog {
     public void show() {
         try {
             super.show();
-        }catch (IllegalArgumentException e)
-        {
+        }catch (IllegalArgumentException e) {
             Logger.e(e.toString());
         }
     }
@@ -61,8 +59,7 @@ public class LoadingDialog extends Dialog {
     public void dismiss() {
         try {
             super.dismiss();
-        }catch (IllegalArgumentException e)
-        {
+        }catch (IllegalArgumentException e) {
             Logger.e(e.toString());
         }
     }
@@ -92,8 +89,7 @@ public class LoadingDialog extends Dialog {
         }
         return super.onTouchEvent(event);
     }
-    public void startCount(OnListenerCallBack callBack)
-    {
+    public void startCount(OnListenerCallBack callBack) {
         this.callBack = callBack;
         count = Integer.valueOf(tvCount.getText().toString());
         timer = new Timer();
@@ -109,20 +105,17 @@ public class LoadingDialog extends Dialog {
         timer.schedule(timerTask,0,1000);
     }
 
-    public void reStartCount(String str, int i)
-    {
+    public void reStartCount(String str, int i) {
         setText(str);
         setCountNum(i);
         count = Integer.valueOf(tvCount.getText().toString());
     }
-    public void stopCount()
-    {
+    public void stopCount() {
         if(isShowing())
             dismiss();
         if(timer!=null)
             timer.cancel();
-        if(timerTask!=null)
-        {
+        if(timerTask!=null) {
             timerTask.cancel();
             timerTask=null;
         }
@@ -135,12 +128,10 @@ public class LoadingDialog extends Dialog {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what==0)
-            {
+            if(msg.what==0) {
                 tvCount.setText(count+"");
                 count--;
-                if(count==-1)
-                {
+                if(count==-1) {
                     stopCount();
                 }
             }

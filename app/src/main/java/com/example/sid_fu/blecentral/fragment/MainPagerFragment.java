@@ -16,6 +16,7 @@ import com.example.sid_fu.blecentral.R;
 import com.example.sid_fu.blecentral.ScanDeviceRunnable;
 import com.example.sid_fu.blecentral.db.DbHelper;
 import com.example.sid_fu.blecentral.db.entity.RecordData;
+import com.example.sid_fu.blecentral.helper.DataHelper;
 import com.example.sid_fu.blecentral.ui.BleData;
 import com.example.sid_fu.blecentral.ui.frame.BaseFragment;
 import com.example.sid_fu.blecentral.utils.Constants;
@@ -25,7 +26,6 @@ import com.example.sid_fu.blecentral.utils.Logger;
 import com.example.sid_fu.blecentral.utils.SharedPreferences;
 import com.example.sid_fu.blecentral.utils.ToastUtil;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -207,61 +207,8 @@ public class MainPagerFragment extends BaseFragment {
     }
 
     private void bleStringToDouble(BluetoothDevice device, boolean isNotify,byte[] data) {
-        float voltage = 0.00f,press = 0, temp =0;
-        int temp1 = 0,state = 0,rssi = 0;
-        DecimalFormat df = new DecimalFormat("######0.0");
-        BleData bleData = new BleData();
-        Logger.e(DigitalTrans.byte2hex(data));
-        if(data==null) return;
-        if(isNotify&&data.length==4) {
-            press = ((float)DigitalTrans.byteToAlgorism(data[1])*160)/51/100;
-            voltage = ((float)(DigitalTrans.byteToAlgorism(data[3])-31)*20/21+160)/100;
-            temp = DigitalTrans.byteToAlgorism(data[2])-50;
-//            state = DigitalTrans.byteToBin(data[0]);
-            state = DigitalTrans.byteToBin0x0F(data[0]);
-            if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
-
-            }else if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
-                press = press*102;
-            }else{
-                press = press*14.5f;
-            }
-
-            if(SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃").equals("℃")) {
-                temp1 = (int)temp;
-            }else {
-                temp1 = (int)(temp*1.8f)+32;
-            }
-        }else {
-            if(data.length==5&Constants.IS_TEST) {
-                voltage = ((float)(DigitalTrans.byteToAlgorism(data[0])-31)*20/21+160)/100;
-                temp = DigitalTrans.byteToAlgorism(data[1])-50;
-                press = ((float)DigitalTrans.byteToAlgorism(data[2])*160)/51/100;
-                state = DigitalTrans.byteToBin0x0F(data[3]);
-                rssi = 256-DigitalTrans.byteToAlgorism(data[4]);
-                Logger.e("信号强度：-"+rssi);
-            }else if(data.length==4) {
-                voltage = ((float)(DigitalTrans.byteToAlgorism(data[0])-31)*20/21+160)/100;
-                temp = DigitalTrans.byteToAlgorism(data[1])-50;
-                press = ((float)DigitalTrans.byteToAlgorism(data[2])*160)/51/100;
-                state = DigitalTrans.byteToBin0x0F(data[3]);
-            }else if(data.length==2) {
-//                broadcastUpdate(BluetoothLeService.ACTION_SEND_OK,device);
-                return;
-            }
-        }
-        Logger.e("状态："+state+"\n");
-        Logger.e("压力值："+press+"\n");
-        Logger.e("温度："+temp+"\n");
-        Logger.e("电压"+voltage+"");
-
-        bleData.setTemp (temp1);
-        bleData.setPress(Float.valueOf(df.format(press)));
-        bleData.setStatus(state);
-        bleData.setVoltage(voltage);
-
+        BleData bleData = DataHelper.getData(data);
         showDataForUI(device.getAddress(),bleData);
-
         if(device.getAddress().equals(mActivity.manageDevice.getLeftBDevice())) {
             handleException(bleData, mActivity.manageDevice.getLeftBDevice());
             //开启定时器用于监听数据
@@ -306,38 +253,8 @@ public class MainPagerFragment extends BaseFragment {
     }
 
     private void bleStringToDouble(RecordData recordData) {
-        float voltage = 0.00f,press = 0, temp =0;
-        int temp1 = 0,state = 0,rssi = 0;
-        byte[] data;
-        DecimalFormat df = new DecimalFormat("######0");
-        BleData bleData = new BleData();
-        data = DigitalTrans.hex2byte(recordData.getData());
-        if(data==null) return;
-        if(data.length==4) {
-            voltage = ((float)(DigitalTrans.byteToAlgorism(data[3])-31)*20/21+160)/100;
-            press = ((float)DigitalTrans.byteToAlgorism(data[1])*160)/51/100;
-            temp = (float)(DigitalTrans.byteToAlgorism(data[2])-50);
-            state = DigitalTrans.byteToBin0x0F(data[0]);
-            if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
-
-            }else if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
-                press = press*102;
-            }else{
-                press = press*14.5f;
-            }
-
-            if(SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃").equals("℃")) {
-                temp1 = (int)temp;
-            }else {
-                temp1 = (int)(temp*1.8f)+32;
-            }
-        }
-        Logger.e("状态："+state+"\n"+"压力值："+press+"\n"+"温度："+temp+"\n"+"电压"+voltage+"");
-        bleData.setTemp (temp1);
-        bleData.setPress(press);
-        bleData.setStatus(state);
-        bleData.setVoltage(voltage);
-
+        byte[] data = DigitalTrans.hex2byte(recordData.getData());
+        BleData bleData = DataHelper.getData(data);
         showDataForUI(recordData.getName(),bleData);
 
         if(recordData.getName().equals(mActivity.manageDevice.getLeftBDevice())) {

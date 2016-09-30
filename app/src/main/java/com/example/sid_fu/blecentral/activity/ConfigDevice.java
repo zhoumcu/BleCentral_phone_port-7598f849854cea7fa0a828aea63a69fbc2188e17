@@ -623,24 +623,31 @@ public class ConfigDevice extends BaseActionBarActivity implements View.OnClickL
                 isFirst = false;
                 isWrite = false;
                 timeout = false;
-                if(state==5)
-                {
+                if(state==5) {
                     boolean firstTimeUse = SharedPreferences.getInstance().getBoolean(Constants.FIRST_CONFIG, false);
                     if(!firstTimeUse) {
                         Intent intentH = new Intent();
                         intentH.setClass(ConfigDevice.this,HomeActivity.class);
                         startActivity(intentH);
                     }
-                    finish();
                     App.getDeviceDao().add(deviceDate);
                     SharedPreferences.getInstance().putBoolean(Constants.FIRST_CONFIG,true);
-                }else
-                {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(loadDialog.isShowing())
+                                loadDialog.dismiss();
+                            finish();
+                        }
+                    },200);
+                   return;
+                }else {
                     showDialog(getResources().getString(R.string.step1),false);
                 }
-                if(mBluetoothAdapter!=null)
+                if(mBluetoothAdapter!=null){
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                mBluetoothAdapter.startLeScan(mLeScanCallback);
+                    mBluetoothAdapter.startLeScan(mLeScanCallback);
+                }
             }
         }
     };
@@ -699,8 +706,7 @@ public class ConfigDevice extends BaseActionBarActivity implements View.OnClickL
     }
 
     private void showDialog(String str,boolean isConnect) {
-        if(!loadDialog.isShowing())
-        {
+        if(!this.isFinishing()&&!loadDialog.isShowing()) {
             loadDialog.setText(getResources().getStringArray(R.array.staticText)[state-1]+str);
             loadDialog.show();
             loadDialog.setCountNum(20);

@@ -75,16 +75,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
-        initDate();
+        refreash();
     }
     private void refreash() {
         articles = App.getDeviceDao().listByAll();
-        adapter.updateData(fillterDate(articles));
-    }
-    private void initDate() {
-        articles = App.getDeviceDao().listByAll();
         if(articles==null)return;
         if(articles.size()==0) view.setVisibility(View.GONE);
+        adapter.updateData(fillterDate(articles));
+        initDate();
+    }
+    private void initDate() {
         for (Device device : articles) {
             if(device.getDefult()!=null) {
                 if(device.getDefult().equals("true")) {
