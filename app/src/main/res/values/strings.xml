@@ -85,5 +85,11 @@
     <string name="defaulttemp">--</string>
     <string name="defaultdate"></string>
     <string name="defaulttime">--</string>
-    <string name="codeVersion">版本1.1.14</string>
+    <string name="codeVersion">版本1.1.15</string>
+    <!--
+        true : show rssi;
+        false : no show rssi
+    -->
+    <bool name="isShowRssi">true</bool>
+
 </resources>

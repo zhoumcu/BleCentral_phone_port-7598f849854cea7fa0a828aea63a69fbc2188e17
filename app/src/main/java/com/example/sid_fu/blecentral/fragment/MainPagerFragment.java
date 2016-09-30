@@ -12,6 +12,7 @@ import com.example.sid_fu.blecentral.App;
 import com.example.sid_fu.blecentral.BluetoothLeService;
 import com.example.sid_fu.blecentral.ManageDevice;
 import com.example.sid_fu.blecentral.ParsedAd;
+import com.example.sid_fu.blecentral.R;
 import com.example.sid_fu.blecentral.ScanDeviceRunnable;
 import com.example.sid_fu.blecentral.db.DbHelper;
 import com.example.sid_fu.blecentral.db.entity.RecordData;
@@ -165,7 +166,8 @@ public class MainPagerFragment extends BaseFragment {
                 ParsedAd ad = DataUtils.parseData(scanRecord);
                 bleIsFind(device.getAddress(),"", 3.5f);
                 bleStringToDouble(device,true,ad.datas);
-//                showRssi(device, rssi);
+                if(getActivity().getResources().getBoolean(R.bool.isShowRssi))
+                    showRssi(device, rssi);
                 Logger.e("收到广播数据");
             }else if(BluetoothLeService.ACTION_DISCONNECT_SCAN.equals(action)) {
                 //解绑断开

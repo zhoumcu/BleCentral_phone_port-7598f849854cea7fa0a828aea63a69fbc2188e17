@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -146,18 +145,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
             case R.id.img_ecode:
                 break;
             case R.id.btn_bund:
-                Intent intent2 = new Intent(mContext, CarInfoDetailActivity.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putInt("id", currentDevice.getCarID());
                 mBundle.putInt("state", CarInfoDetailActivity.DETAILS);
-                Logger.e(currentDevice.toString());
-                intent2.putExtras(mBundle);
-                mContext.startActivity(intent2);
+                goActivity(CarInfoDetailActivity.class,mBundle);
                 break;
             case R.id.btn_normal:
-                String contentString = "vlt_tpms_device" + "|" + currentDevice.getLeft_FD() + "|" +currentDevice.getRight_FD()
-                        + "|" + currentDevice.getLeft_BD() + "|" + currentDevice.getRight_BD()
-                        +"|"+currentDevice.getDeviceName()+"|"+currentDevice.getDeviceDescripe()
+                String contentString = "vlt_tpms_device"
+                        + "|" + currentDevice.getLeft_FD()
+                        + "|" +currentDevice.getRight_FD()
+                        + "|" + currentDevice.getLeft_BD() + "|"
+                        + currentDevice.getRight_BD()
+                        +"|"+currentDevice.getDeviceName()+
+                        "|"+currentDevice.getDeviceDescripe()
                         +"|"+currentDevice.getImagePath();
                 Intent intent = new Intent();
                 intent.setClass(mContext, PictureView.class);
@@ -323,18 +323,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
             Logger.e("exit application");
             this.finish();
         }
-    }
-
-    public void saveToFile(TextToSpeech speech, String text, String file) {
-        String destFileName = "/sdcard/tts/" + file + ".wav";
-        speech.synthesizeToFile(text, null, destFileName);
-    }
-
-    public void readFromFile(TextToSpeech speech, String file) {
-        String destFileName = "/sdcard/tts/" + file + ".wav";
-        speech.addSpeech("2", destFileName);
-        speech.speak("2", TextToSpeech.QUEUE_ADD, null);
-
     }
 
     @Override

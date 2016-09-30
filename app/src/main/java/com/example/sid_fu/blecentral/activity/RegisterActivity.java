@@ -1,17 +1,14 @@
 package com.example.sid_fu.blecentral.activity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,8 +21,6 @@ import com.example.sid_fu.blecentral.http.HttpContext;
 import com.example.sid_fu.blecentral.http.base.HttpResponseHandler;
 import com.example.sid_fu.blecentral.ui.activity.BaseActionBarActivity;
 import com.example.sid_fu.blecentral.utils.CommonUtils;
-import com.example.sid_fu.blecentral.utils.Constants;
-import com.example.sid_fu.blecentral.utils.SharedPreferences;
 import com.example.sid_fu.blecentral.utils.ToastUtil;
 import com.example.sid_fu.blecentral.widget.LoadingDialog;
 
@@ -89,13 +84,11 @@ public class RegisterActivity extends BaseActionBarActivity {
         btnCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(phone.getText().toString()))
-                {
+                if (TextUtils.isEmpty(phone.getText().toString())) {
                     ToastUtil.show("手机号码不能为空");
                     return;
                 }
-                if(phone.getText().toString().length()!=11)
-                {
+                if(phone.getText().toString().length()!=11) {
                     ToastUtil.show("手机号码位数不正确");
                     return;
                 }
@@ -109,7 +102,6 @@ public class RegisterActivity extends BaseActionBarActivity {
                     public void onFailure(Request request, IOException e) {
                         super.onFailure(request, e);
                     }
-
                     @Override
                     public void onSuccess(int statusCode, String content) {
                         super.onSuccess(statusCode, content);
@@ -150,11 +142,9 @@ public class RegisterActivity extends BaseActionBarActivity {
             if(phone.getText().length() == 11){
                btnCode.setEnabled(true);
             }
-
         }
     };
-    class TimeCount extends CountDownTimer
-    {
+    class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
@@ -180,15 +170,13 @@ public class RegisterActivity extends BaseActionBarActivity {
             ToastUtil.show("手机号码和验证码不能为空");
             return;
         }else{
-            if(!code.getText().toString().equals(geCode))
-            {
+            if(!code.getText().toString().equals(geCode)) {
                 loadingDialog.dismiss();
                 ToastUtil.show("验证码不正确！");
                 return;
             }
         }
-        if(!checkBox.isChecked())
-        {
+        if(!checkBox.isChecked()) {
             ToastUtil.show("请先阅读用户使用协议及隐私条款");
             return;
         }

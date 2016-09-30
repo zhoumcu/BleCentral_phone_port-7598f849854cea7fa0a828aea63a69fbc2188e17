@@ -34,16 +34,10 @@ import com.example.sid_fu.blecentral.activity.MainFrameForStartServiceActivity;
 import com.example.sid_fu.blecentral.db.dao.DeviceDao;
 import com.example.sid_fu.blecentral.db.entity.Device;
 import com.example.sid_fu.blecentral.ui.frame.BaseBleConnetFragment;
-import com.example.sid_fu.blecentral.utils.Constants;
 import com.example.sid_fu.blecentral.utils.DataUtils;
 import com.example.sid_fu.blecentral.utils.DigitalTrans;
 import com.example.sid_fu.blecentral.utils.Logger;
-import com.example.sid_fu.blecentral.utils.SharedPreferences;
-import com.example.sid_fu.blecentral.utils.ToastUtil;
 import com.example.sid_fu.blecentral.widget.LoadingDialog;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/6/6.
@@ -72,7 +66,6 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
     public static int leftB = 3;
     public static int rightB =4;
     public static int none =5;
-    private List<BluetoothDevice> mDeviceList = new ArrayList<>();
     private int state;
     private DeviceDao deviceDaoUtils;
     private Device deviceDao;
@@ -118,29 +111,34 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
     }
 
     private void initIsCofigBle() {
-        Logger.e(mActivity.deviceDetails.toString());
-        Logger.e(mActivity.manageDevice.getLeftFDevice());
-        Logger.e(mActivity.manageDevice.getRightFDevice());
+        Logger.e(mActivity.deviceDetails.toString()+":"+mActivity.manageDevice.getLeftFDevice()+":"+mActivity.manageDevice.getRightFDevice());
         if(mActivity.manageDevice.getLeftFDevice()==null||mActivity.manageDevice.getLeftFDevice().equals("null")) {
             topleft_next.setText("点击绑定");
+            topleft_next.setBackgroundResource(R.mipmap.b_btn);
         }else {
             topleft_next.setText("点击解绑");
+            topleft_next.setBackgroundResource(R.mipmap.unbund);
         }
-        if(mActivity.manageDevice.getRightFDevice()==null)
-        {
+        if(mActivity.manageDevice.getRightFDevice()==null) {
             topright_next.setText("点击绑定");
+            topright_next.setBackgroundResource(R.mipmap.b_btn);
         }else {
             topright_next.setText("点击解绑");
+            topright_next.setBackgroundResource(R.mipmap.unbund);
         }
         if(mActivity.manageDevice.getLeftBDevice()==null) {
             bottomleft_next.setText("点击绑定");
+            bottomleft_next.setBackgroundResource(R.mipmap.b_btn);
         }else {
             bottomleft_next.setText("点击解绑");
+            bottomleft_next.setBackgroundResource(R.mipmap.unbund);
         }
         if(mActivity.manageDevice.getRightBDevice()==null) {
             bottomright_next.setText("点击绑定");
+            bottomright_next.setBackgroundResource(R.mipmap.b_btn);
         }else {
             bottomright_next.setText("点击解绑");
+            bottomright_next.setBackgroundResource(R.mipmap.unbund);
         }
     }
     private void initUI() {
@@ -164,47 +162,35 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
         topleft_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(topleft_next.getText().equals(getResources().getString(R.string.unbund))) {
-                    showNotifyDialog(leftF);
-
-                }else if(topleft_next.getText().equals(getResources().getString(R.string.unbund_success))){
-                    bundDevice(leftF);
-                }
+                sendButtonEvent(topleft_next,leftF);
             }
         });
         topright_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(topright_next.getText().equals(getResources().getString(R.string.unbund))) {
-                    showNotifyDialog(rightF);
-                }else if(topright_next.getText().equals(getResources().getString(R.string.unbund_success))) {
-                    bundDevice(rightF);
-                }
+                sendButtonEvent(topright_next,rightF);
             }
         });
         bottomleft_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomleft_next.getText().equals(getResources().getString(R.string.unbund))) {
-                    showNotifyDialog(leftB);
-                }else if(bottomleft_next.getText().equals(getResources().getString(R.string.unbund_success))) {
-                    bundDevice(leftB);
-                }
+                sendButtonEvent(bottomleft_next,leftB);
             }
         });
         bottomright_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bottomright_next.getText().equals(getResources().getString(R.string.unbund))) {
-                    showNotifyDialog(rightB);
-                }else if(bottomright_next.getText().equals(getResources().getString(R.string.unbund_success))) {
-                    bundDevice(rightB);
-                }
+                sendButtonEvent(bottomright_next,rightB);
             }
         });
     }
-
-    private boolean timeout;
+    private void sendButtonEvent(TextView tv,int event){
+        if(tv.getText().equals(getResources().getString(R.string.unbund))) {
+            showNotifyDialog(event);
+        }else if(tv.getText().equals(getResources().getString(R.string.unbund_success))) {
+            bundDevice(event);
+        }
+    }
     private Handler mHandler = new Handler()
     {
         @Override
@@ -216,24 +202,6 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
                 it.putExtra(ConfigDevice.PAIRED_OK,"重试");
                 it.putExtra(ConfigDevice.NONE_NEXT,true);
                 startActivity(it);
-//                CustomDialog.Builder builder = new CustomDialog.Builder(getActivity());
-//                builder.setMessage("小安胎压检测系统测试提示语言，请根据具体情况点击合适按钮");
-//                builder.setTitle("提示");
-//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                        //设置你的操作事项
-//                    }
-//                });
-//
-//                builder.setNegativeButton("取消",
-//                    new android.content.DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                });
-//
-//                builder.create().show();
                 stopScan();
                 timeout = true;
             }
@@ -246,30 +214,13 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
     }
     private void unBundDevice(TextView tvNext,MyBluetoothDevice device,int state) {
         tvNext.setText("点击绑定");
-//        showDialog("正在解绑。。。");
+        tvNext.setBackgroundResource(R.mipmap.b_btn);
         Logger.e("正在解绑。。。"+state);
-//        mHandler.sendEmptyMessage(0);
         mActivity.mDeviceList.remove(device);
         //保存蓝牙mac地址
         deviceDaoUtils.update(state,mActivity.deviceId,null);
-        //SharedPreferences.getInstance().putBoolean(Constants.FIRST_USED_RB,false);
         if(device!=null)
             broadcastUpdate(BluetoothLeService.ACTION_DISCONNECT_SCAN,device.getDevice());
-//        showDialog("解绑成功。。。");
-        switch (state) {
-            case 1:
-                mActivity.manageDevice.setLeftFDevice(null);
-                break;
-            case 2:
-                mActivity.manageDevice.setRightFDevice(null);
-                break;
-            case 3:
-                mActivity.manageDevice.setLeftBDevice(null);
-                break;
-            case 4:
-                mActivity.manageDevice.setRightBDevice(null);
-                break;
-        }
     }
     private void bundDevice(int states) {
         isRecevice = false;
@@ -279,93 +230,21 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
         //ToastUtil.show("开始扫描...");
     }
 
-    private void initData(MyBluetoothDevice device, Button btn) {
-        if(device==null) {
-            btn.setText(getResources().getString(R.string.erronofind));
-        }else if(!device.isSuccessComm()) {
-            btn.setText(getResources().getString(R.string.erroinfo));
-        }
-    }
-    private void success(BluetoothDevice device) {
-        mDeviceList.add(device);
-        if(mActivity.leftFDevice!=null&&device.getAddress().equals(mActivity.leftFDevice.getDevice().getAddress())) {
-            topleft_next.setText("点击绑定");
-            mActivity.leftFDevice.setTimeOutDisconnect(false);
-            if(mActivity.leftFDevice.getBluetoothGatt()!=null)
-                mActivity.leftFDevice.getBluetoothGatt().disconnect();
-//            mActivity.leftFDevice.getBluetoothGatt().close();
-            mActivity.mDeviceList.remove( mActivity.leftFDevice);
-            //保存蓝牙mac地址
-//            deviceDao.setLeft_FD(null);
-            deviceDaoUtils.update(1,mActivity.deviceId,null);
-//            SharedPreferences.getInstance().putString(Constants.LEFT_F_DEVICE,null);
-            SharedPreferences.getInstance().putBoolean(Constants.FIRST_USED_LF,false);
-            mActivity.manageDevice.setLeftFDevice("");
-        }else if(mActivity.rightFDevice!=null&&device.getAddress().equals(mActivity.rightFDevice.getDevice().getAddress())) {
-            topright_next.setText("点击绑定");
-            mActivity.rightFDevice.setTimeOutDisconnect(false);
-            if(mActivity.rightFDevice.getBluetoothGatt()!=null)
-            mActivity.rightFDevice.getBluetoothGatt().disconnect();
-//            mActivity.rightFDevice.getBluetoothGatt().close();
-            mActivity.mDeviceList.remove( mActivity.rightFDevice);
-            //保存蓝牙mac地址
-//            deviceDao.setRight_FD(null);
-            deviceDaoUtils.update(2,mActivity.deviceId,null);
-//            SharedPreferences.getInstance().putString(Constants.RIGHT_F_DEVICE,null);
-            SharedPreferences.getInstance().putBoolean(Constants.FIRST_USED_RF,false);
-            mActivity.manageDevice.setRightFDevice("");
-        }else if(mActivity.leftBDevice!=null&&device.getAddress().equals(mActivity.leftBDevice.getDevice().getAddress())) {
-            bottomleft_next.setText("点击绑定");
-            mActivity.leftBDevice.setTimeOutDisconnect(false);
-            if(mActivity.leftBDevice.getBluetoothGatt()!=null)
-                mActivity.leftBDevice.getBluetoothGatt().disconnect();
-//            mActivity.leftBDevice.getBluetoothGatt().close();
-            mActivity.mDeviceList.remove( mActivity.leftBDevice);
-            //保存蓝牙mac地址
-//            deviceDao.setLeft_BD(null);
-            deviceDaoUtils.update(3,mActivity.deviceId,null);
-//            SharedPreferences.getInstance().putString(Constants.LEFT_B_DEVICE,null);
-            SharedPreferences.getInstance().putBoolean(Constants.FIRST_USED_LB,false);
-            mActivity.manageDevice.setLeftBDevice("");
-        }else if(mActivity.rightBDevice!=null&&device.getAddress().equals(mActivity.rightBDevice.getDevice().getAddress())) {
-            bottomright_next.setText("点击绑定");
-            mActivity.rightBDevice.setTimeOutDisconnect(false);
-            if(mActivity.rightBDevice.getBluetoothGatt()!=null)
-                mActivity.rightBDevice.getBluetoothGatt().disconnect();
-//            mActivity.rightBDevice.getBluetoothGatt().close();
-            mActivity.mDeviceList.remove( mActivity.rightBDevice);
-            //保存蓝牙mac地址
-//            deviceDao.setRight_BD(null);
-            deviceDaoUtils.update(4,mActivity.deviceId,null);
-//            SharedPreferences.getInstance().putString(Constants.RIGHT_B_DEVICE,null);
-            mActivity.manageDevice.setRightBDevice("");
-            SharedPreferences.getInstance().putBoolean(Constants.FIRST_USED_RB,false);
-        }
-//        deviceDaoUtils.update(deviceDao);
-        ToastUtil.show(device.getAddress()+"解绑成功！");
-    }
-
-    private boolean isRecevice = true;
-    private boolean isWrite;
-    // Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
+    /** Handles various events fired by the Service.
+     * ACTION_GATT_CONNECTED: connected to a GATT server.
+     * ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+     * ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+     * ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
+     * or notification operations.
+     **/
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
             String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra("DEVICE_ADDRESS");
+                isTimeOut();
                 Logger.e("connected:"+device.getAddress());
-                if(timeout) {
-                    timeout = false;
-                    isWrite = true;
-                    mBluetoothLeService.disconnect();
-                    return;
-                }
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra("DEVICE_ADDRESS");
                 //断开
@@ -374,20 +253,13 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
                 Logger.e("Disconneted GATT Services"+device.getAddress());
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra("DEVICE_ADDRESS");
-                if(timeout) {
-                    timeout = false;
-                    isWrite = true;
-                    mBluetoothLeService.disconnect();
-                    return;
-                }
+                if(isTimeOut()) return;
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mBluetoothLeService.writeChar6("AT+USED=1");
                     }
                 },2000);
-                //mActivity.mBluetoothLeService.writeChar6("AT+USED=1");
-                //mActivity.mBluetoothLeService.writeChar6("AT+USED=1");
                 if(!isWrite)
                     showDialog("正在配置传感器。。。",false);
                 Logger.e("Discover GATT Services"+device.getAddress()+"send:AT+USED=1");
@@ -399,8 +271,7 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
                         BluetoothDevice device = intent.getParcelableExtra("DEVICE_ADDRESS");
                         //通讯成功 OK
                         if (data != null) {
-                            if(data.length==2&&!isWrite)
-                            {
+                            if(data.length==2&&!isWrite) {
                                 onSuccess(device);
                                 isWrite = true;
                                 Logger.e("解绑成功");
@@ -413,8 +284,7 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
                 int rssi = intent.getIntExtra("RSSI",0);
                 byte[] scanRecord = intent.getByteArrayExtra("SCAN_RECORD");
                 Logger.e("绑定==收到广播数据"+rssi);
-                for (MyBluetoothDevice ble : mActivity.mDeviceList)
-                {
+                for (MyBluetoothDevice ble : mActivity.mDeviceList) {
                     Logger.e("列表中存在的设备："+ble.getDevice().getAddress());
                 }
                 if(!isRecevice&&!ManageDevice.isBundConfigEquals(mActivity.mDeviceList,device)&&rssi>maxLenght) {
@@ -422,39 +292,34 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
                     bleIsFind(device,rssi,scanRecord);
                 }
             }else if (NotifyDialog.ACTION_BTN_STATE.equals(action)) {
-//                int state = intent.getExtras().getInt(NotifyDialog.BTN_STATE);
-//                Logger.e("重试"+state);
-                isWrite = false;
-                isRecevice = false;
-                timeout = false;
                 startScan();
-//                stopScan();
                 mBluetoothLeService.disconnect();
                 showDialog("正在识别信号强度。。。",false);
             }else if (NotifyDialog.ACTION_BTN_NEXT.equals(action)) {
-                Logger.e("完成"+state);
-                isWrite = false;
-                timeout = false;
                 stopScan();
                 mBluetoothLeService.disconnect();
+                Logger.e("完成"+state);
             }
         }
     };
 
-    private void onSuccess(BluetoothDevice device)
-    {
+    private void onSuccess(BluetoothDevice device) {
         switch (state) {
             case 1:
                 setUsedToTrue(device,topleft_next,tv_note_left_from,"左前轮");
+                mActivity.manageDevice.setLeftFDevice(device.getAddress());
                 break;
             case 2:
                 setUsedToTrue(device,topright_next,tv_note_right_from,"右前轮");
+                mActivity.manageDevice.setRightFDevice(device.getAddress());
                 break;
             case 3:
                 setUsedToTrue(device,bottomleft_next,tv_note_left_back,"左后轮");
+                mActivity.manageDevice.setLeftBDevice(device.getAddress());
                 break;
             case 4:
                 setUsedToTrue(device,bottomright_next,tv_note_right_back,"右后轮");
+                mActivity.manageDevice.setRightBDevice(device.getAddress());
                 break;
         }
     }
@@ -470,8 +335,7 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         return intentFilter;
     }
-    private void bleIsFind(BluetoothDevice device, int rssi, byte[] data)
-    {
+    private void bleIsFind(BluetoothDevice device, int rssi, byte[] data) {
         ParsedAd ad = DataUtils.parseData(data);
         if(ad == null||ad.datas == null) return;
         if(ad.datas.length == 0) return;
@@ -501,8 +365,7 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
             scanForResult(device);
         }
     }
-    private void scanForResult(BluetoothDevice device)
-    {
+    private void scanForResult(BluetoothDevice device) {
         stopScan();
         Logger.e("开始连接："+device.getAddress());
         showDialog(device.getAddress()+"正在连接。。。",false);
@@ -511,52 +374,24 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
     }
     private void setUsedToTrue(BluetoothDevice device,Button currentBtn ,TextView currentTv,String str) {
         //如果出现超时，任何数据都放弃
-        if(timeout) {
-            timeout = false;
-            isWrite = true;
-           mBluetoothLeService.disconnect();
-            return;
-        }
+        if(isTimeOut()) return;
         loadDialog.stopCount();
         Intent it =new Intent(getActivity(),NotifyDialog.class);
         it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         it.putExtra(ConfigDevice.PAIRED_OK,"完成");
         it.putExtra(ConfigDevice.NONE_NEXT,true);
         startActivity(it);
-        //Intent broackIntent = new Intent(NotifyDialog.ACTION_CHANGE_STATE);
-        //broackIntent.putExtra(NotifyDialog.BTN_STATE,"完成");
-        //getActivity().sendBroadcast(broackIntent);
-
-        //showDialog("正在配置传感器。。。",false);
         currentBtn.setText(getResources().getString(R.string.unbund));
-        //currentBtn.setText("确定");
+        currentBtn.setBackgroundResource(R.mipmap.unbund);
         currentBtn.setVisibility(View.VISIBLE);
         //保存数据到本地
         deviceDaoUtils.update(state,mActivity.deviceId,device.getAddress());
         currentTv.setText(str+"：\n"+device.getAddress());
-//        mDeviceList.add(device);
-        //showDialog("正在复位传感器。。。",false);
-        switch (state) {
-            case 1:
-                mActivity.manageDevice.setLeftFDevice(device.getAddress());
-                break;
-            case 2:
-                mActivity.manageDevice.setRightFDevice(device.getAddress());
-                break;
-            case 3:
-                mActivity.manageDevice.setLeftBDevice(device.getAddress());
-                break;
-            case 4:
-                mActivity.manageDevice.setRightBDevice(device.getAddress());
-                break;
-        }
         mBluetoothLeService.disconnect();
         state = none;
     }
-    private void showDialog(String str,boolean isConnect)
-    {
-        if(!loadDialog.isShowing())
-        {
+    private void showDialog(String str,boolean isConnect) {
+        if(!loadDialog.isShowing()) {
             loadDialog.setText(str);
             loadDialog.show();
             loadDialog.setCountNum(30);
@@ -569,19 +404,14 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
         }else{
             loadDialog.reStartCount(str,30);
         }
-//        App.getInstance().speak(str);
-//        mActivity.startScan();
     }
-    private void showDialog(String str)
-    {
-        if(!loadDialog.isShowing())
-        {
+    private void showDialog(String str) {
+        if(!loadDialog.isShowing()) {
             loadDialog.setText(str);
             loadDialog.show();
         }else{
             loadDialog.stopCount();
         }
-//        App.getInstance().speak(str);
     }
     @Override
     public void onDestroy() {
@@ -589,16 +419,14 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
         try {
             getActivity().unregisterReceiver(mGattUpdateReceiver);
             getActivity().unbindService(mServiceConnection);
-        }catch (IllegalArgumentException e)
-        {
+        }catch (IllegalArgumentException e) {
             Logger.e("mHomeKeyEventReceiver:"+e.toString());
         }
     }
 
     @Override
     public void broadcastUpdate(String action, BluetoothDevice gatt, int rssi, byte[] scanResult) {
-        for (MyBluetoothDevice ble : mActivity.mDeviceList)
-        {
+        for (MyBluetoothDevice ble : mActivity.mDeviceList) {
             Logger.e("列表中存在的设备："+ble.getDevice().getAddress());
         }
         if(!isRecevice&&!isBundBle(gatt)&&rssi>maxLenght) {
@@ -606,8 +434,7 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
             bleIsFind(gatt,rssi,scanResult);
         }
     }
-    private boolean isBundBle(BluetoothDevice device)
-    {
+    private boolean isBundBle(BluetoothDevice device) {
         if(device.getAddress().equals(mActivity.manageDevice.getLeftFDevice()))
             return true;
         if(device.getAddress().equals(mActivity.manageDevice.getRightFDevice()))
@@ -621,8 +448,7 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
     /**
      *
      */
-    private void showNotifyDialog(final int state)
-    {
+    private void showNotifyDialog(final int state) {
 //        App.getInstance().speak(preStr+"与"+curStr+"进行对调，请选择确定或者取消");
         new AlertDialog.Builder(getActivity()).setTitle("系统提示")//设置对话框标题
                 .setMessage("请确定传感器已经损坏或者无法正常工作情况下，才能使用解绑功能，否则解绑成功之后，无法进行绑定，" +
@@ -636,16 +462,19 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
                         switch (state) {
                             case 1:
                                 unBundDevice(topleft_next,mActivity.leftFDevice,leftF);
+                                mActivity.manageDevice.setLeftFDevice(null);
                                 break;
                             case 2:
                                 unBundDevice(topright_next,mActivity.rightFDevice,rightF);
-
+                                mActivity.manageDevice.setRightFDevice(null);
                                 break;
                             case 3:
                                 unBundDevice(bottomleft_next,mActivity.leftBDevice,leftB);
+                                mActivity.manageDevice.setLeftBDevice(null);
                                 break;
                             case 4:
                                 unBundDevice(bottomright_next,mActivity.rightBDevice,rightB);
+                                mActivity.manageDevice.setRightBDevice(null);
                                 break;
                         }
                     }
@@ -657,7 +486,6 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
             }
         }).show();//在按键响应事件中显示此对话框
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -679,5 +507,13 @@ public class BundDeviceFragment extends BaseBleConnetFragment {
             mBluetoothLeService = null;
         }
     };
-
+    private boolean isTimeOut(){
+        if(timeout) {
+            timeout = false;
+            isWrite = true;
+            mBluetoothLeService.disconnect();
+            return true;
+        }
+        return false;
+    }
 }

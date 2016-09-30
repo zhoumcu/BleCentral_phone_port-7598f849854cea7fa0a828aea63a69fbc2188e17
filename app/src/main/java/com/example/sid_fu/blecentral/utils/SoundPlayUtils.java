@@ -15,6 +15,8 @@ import java.util.Vector;
  * Created by Administrator on 2016/9/2.
  */
 public class SoundPlayUtils {
+
+    public static final int WELCOME_SOUND = 1;
     // SoundPool对象
     public static SoundPool mSoundPlayer = new SoundPool(10,
             AudioManager.STREAM_ALARM, 5);

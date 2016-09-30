@@ -27,13 +27,10 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.example.sid_fu.blecentral.utils.Constants;
 import com.example.sid_fu.blecentral.utils.Logger;
@@ -128,8 +125,7 @@ public class BluetoothLeService extends Service {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String intentAction;
             Logger.i(TAG, "oldStatus=" + status + " NewStates=" + newState);
-            if(status == BluetoothGatt.GATT_SUCCESS)
-            {
+            if(status == BluetoothGatt.GATT_SUCCESS) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     gatt.discoverServices();
                     intentAction = ACTION_GATT_CONNECTED;
@@ -341,12 +337,9 @@ public class BluetoothLeService extends Service {
         return true;
     }
 
-    private boolean checkGattForDevice(BluetoothDevice device)
-    {
-        for (int j=0;j<connectionQueue.size();j++)
-        {
-            if(connectionQueue.get(j).getDevice().getAddress().equals(device.getAddress()))
-            {
+    private boolean checkGattForDevice(BluetoothDevice device) {
+        for (int j=0;j<connectionQueue.size();j++) {
+            if(connectionQueue.get(j).getDevice().getAddress().equals(device.getAddress())) {
                 Logger.i("gatt存在，直接连"+device.getAddress());
                 connectionQueue.get(j).connect();
                 return true;
@@ -404,8 +397,7 @@ public class BluetoothLeService extends Service {
                 }).start();
 
             }
-        }else
-        {
+        }else {
             if(bluetoothGatt ==null) return;
                 new Thread(new Runnable() {
                 public void run() {
@@ -462,15 +454,13 @@ public class BluetoothLeService extends Service {
         if (connectionQueue.isEmpty()&&!Constants.SINGLE_BLE) {
             return;
         }
-        if(!Constants.SINGLE_BLE)
-        {
+        if(!Constants.SINGLE_BLE) {
             for ( BluetoothGatt bluetoothGatt : connectionQueue) {
                 bluetoothGatt.close();
             }
             connectionQueue.clear();
             connectDevice.clear();
-        }else
-        {
+        }else {
             if(bluetoothGatt!=null)
                 bluetoothGatt.close();
         }
@@ -508,8 +498,7 @@ public class BluetoothLeService extends Service {
                 connectionQueue.clear();
                 connectDevice.clear();
             }
-        }else
-        {
+        }else {
             new Thread(new Runnable() {
                 public void run() {
                     try {
@@ -526,8 +515,7 @@ public class BluetoothLeService extends Service {
             }).start();
         }
     }
-    public void removeConnectionQueue(BluetoothGatt gatt)
-    {
+    public void removeConnectionQueue(BluetoothGatt gatt) {
         connectionQueue.remove(gatt);
 //        connectDevice.remove(gatt.getDevice());
     }
@@ -632,8 +620,7 @@ public class BluetoothLeService extends Service {
             Logger.e( "BluetoothAdapter not initialized");
             return;
         }
-        if(!Constants.SINGLE_BLE)
-        {
+        if(!Constants.SINGLE_BLE) {
             for(BluetoothGatt bluetoothGatt:connectionQueue) {
                 Logger.e( "Enable Notification");
                 bluetoothGatt.setCharacteristicNotification(characteristic, true);
@@ -641,8 +628,7 @@ public class BluetoothLeService extends Service {
                 descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                 bluetoothGatt.writeDescriptor(descriptor);
             }
-        }else
-        {
+        }else {
             Logger.e( "Enable Notification");
             bluetoothGatt.setCharacteristicNotification(characteristic, true);
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIG_DESCRIPTOR_UUID);
@@ -792,14 +778,12 @@ public class BluetoothLeService extends Service {
     {
         return this.connectionQueue;
     }
-    public void removeBluethGatt(BluetoothGatt gatt)
-    {
+    public void removeBluethGatt(BluetoothGatt gatt) {
         gatt.disconnect();
         connectionQueue.remove(gatt);
     }
 
-    public void showDialog()
-    {
+    public void showDialog() {
         /*
         new AlertDialog.Builder(this)
                 .setTitle("系统提示")

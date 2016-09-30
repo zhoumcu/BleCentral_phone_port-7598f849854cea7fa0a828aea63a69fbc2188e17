@@ -40,6 +40,9 @@ public abstract class BaseBleConnetFragment extends Fragment{
 
     protected abstract void initConfig();
 
+    public boolean isRecevice = true;
+    public boolean isWrite;
+    public boolean timeout;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -94,8 +97,7 @@ public abstract class BaseBleConnetFragment extends Fragment{
         super.onDestroy();
         try {
             getActivity().unregisterReceiver(mHomeKeyEventReceiver);
-        }catch (IllegalArgumentException e)
-        {
+        }catch (IllegalArgumentException e) {
             Logger.e("mHomeKeyEventReceiver:"+e.toString());
         }
         if(mBluetoothAdapter!=null)
@@ -184,11 +186,16 @@ public abstract class BaseBleConnetFragment extends Fragment{
         return false;
     }
     public void startScan() {
+        isWrite = false;
+        isRecevice = false;
+        timeout = false;
         mBluetoothAdapter.stopLeScan(mLeScanCallback);
         mBluetoothAdapter.startLeScan(mLeScanCallback);
     }
     public void stopScan() {
         App.getInstance().speak("正在关闭蓝牙设备");
+        isWrite = false;
+        timeout = false;
         mBluetoothAdapter.stopLeScan(mLeScanCallback);
     }
 }

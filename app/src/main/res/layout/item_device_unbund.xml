@@ -30,7 +30,7 @@
                 android:textSize="15sp"
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/white"
-                android:background="@mipmap/b_btn"
+                android:background="@null"
                 android:text="点击绑定"
                  />
 

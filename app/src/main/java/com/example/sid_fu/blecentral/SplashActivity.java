@@ -1,6 +1,5 @@
 package com.example.sid_fu.blecentral;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -8,7 +7,6 @@ import android.widget.ImageView;
 import com.example.sid_fu.blecentral.activity.LoginActivity;
 import com.example.sid_fu.blecentral.ui.activity.BaseFragmentActivity;
 import com.example.sid_fu.blecentral.utils.Constants;
-import com.example.sid_fu.blecentral.utils.Logger;
 import com.example.sid_fu.blecentral.utils.SharedPreferences;
 import com.example.sid_fu.blecentral.utils.SoundPlayUtils;
 
@@ -20,7 +18,6 @@ import butterknife.ButterKnife;
  */
 public class SplashActivity extends BaseFragmentActivity {
 
-
     @Bind(R.id.imageView)
     ImageView imageView;
 
@@ -29,7 +26,7 @@ public class SplashActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aty_splash);
         ButterKnife.bind(this);
-        SoundPlayUtils.play(1);
+        SoundPlayUtils.play(SoundPlayUtils.WELCOME_SOUND);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -41,28 +38,11 @@ public class SplashActivity extends BaseFragmentActivity {
     private void initActivity() {
         boolean firstTimeUse = SharedPreferences.getInstance().getBoolean(Constants.FIRST_CONFIG, false);
         if (firstTimeUse) {
-            //initGuideGallery();
-            Intent intent = new Intent();
-            intent.setClass(SplashActivity.this, HomeActivity.class);
-            startActivity(intent);
+            this.goActivity(HomeActivity.class,null);
             finish();
         } else {
-            //initLaunchLogo();
-            Intent intent = new Intent();
-            intent.setClass(SplashActivity.this, LoginActivity.class);
-            startActivity(intent);
+            this.goActivity(LoginActivity.class,null);
             finish();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Logger.e("Ondestroy");
     }
 }
