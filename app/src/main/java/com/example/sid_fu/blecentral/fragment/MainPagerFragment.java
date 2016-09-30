@@ -38,7 +38,7 @@ import java.util.TimerTask;
  */
 public class MainPagerFragment extends BaseFragment {
     //国标10分钟
-    private static final long DISTIME = 6000000;
+    private static final long DISTIME = 600000;
     private int timeCount = 30;
     private SimpleDateFormat d;
     private String nowtime;

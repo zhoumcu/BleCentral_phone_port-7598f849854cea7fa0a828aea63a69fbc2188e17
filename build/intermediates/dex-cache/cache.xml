@@ -1,3 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\libs\internal_impl-23.3.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\internal_impl-23.3.0_ad24fbdb0548753366564736f6a908f554b2ce9c.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-core\4.48\e579bd2905d0399af5029aaaf9817d5fa0ca88a5\ormlite-core-4.48.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\ormlite-core-4.48_0c1f5132b5b67b94438fe9ad50aa92bd0ecc9641.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\PushSDK\unspecified\jars\libs\com.umeng.message_v2.8.1.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="9a60521ed4399e972a79ed3747da4275ff4f677c">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\com.umeng.message_v2.8.1_e0566ea7eb25728ae3d6705b4e135f44faf95202.jar" />
+    </item>
+    <item
+        jar="F:\android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.3.0\support-annotations-23.3.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\support-annotations-23.3.0_4f53dc91c006490df7f7d498873ce88c86929a63.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\com.android.support-appcompat-v7-23.3.0_ef973886ccea640b21b924af2e9056cb419dab17.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.alibaba\fastjson\1.1.34.android\bef1d1224be099c387794bce1bdf81b38f37c6ce\fastjson-1.1.34.android.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="bef1d1224be099c387794bce1bdf81b38f37c6ce">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\fastjson-1.1.34.android_6e6e993848ba64ed8dc896050496aaf8ae46c1e6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.2.0\f7873a2ebde246a45c2a8d6f3247108b4c88a879\okhttp-3.2.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="f7873a2ebde246a45c2a8d6f3247108b4c88a879">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\okhttp-3.2.0_e97c4d684058659f4c78fd063d89ce0d8b400297.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\com.android.support-support-vector-drawable-23.3.0_e13e99b5b9695a0431925ba3b9b498ff7453c54b.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\com.android.support-animated-vector-drawable-23.3.0_f6aaa6725908aa627cd27e29e1b02fc3fca6e93a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.umeng.analytics\analytics\6.0.1\aab9085bca0c26dcb9cb11837a5f5e22cc102a5e\analytics-6.0.1.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="aab9085bca0c26dcb9cb11837a5f5e22cc102a5e">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\analytics-6.0.1_1a9277752e05108a4538a9de7e86f64aaa45755a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.6.0\98476622f10715998eacf9240d6b479f12c66143\okio-1.6.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\okio-1.6.0_c410569bd3ae660f2a7eceb3af69efc833b46b70.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-android\4.48\afa06f539a4026c10b247386312aa67404b80a16\ormlite-android-4.48.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="afa06f539a4026c10b247386312aa67404b80a16">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\ormlite-android-4.48_f36ef3b839478551d009ded9878c754102a43305.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.0.0\4c8d1536dba3812cc1592090dc20c47a4ed3c35e\okhttp-2.0.0.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="4c8d1536dba3812cc1592090dc20c47a4ed3c35e">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\okhttp-2.0.0_7024b42d51551b007cc5278ba7a56e815147e8b4.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\butterknife-7.0.1_fc861cbde294a7e4a9efd57936d766cb077b60e2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.wire\wire-runtime\2.1.2\fcaa443f7b6ad5f2d9b6a68c55972a366aaac5a\wire-runtime-2.1.2.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="0fcaa443f7b6ad5f2d9b6a68c55972a366aaac5a">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\wire-runtime-2.1.2_d0340976fd02a9eee41f6e7218093f6c5bc61d2a.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\PushSDK\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="91b87e2132151502b2b6771a2e1a1835bec57d6d">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17-PushSDK-unspecified_532b4f1adb25c57c2b53dab184216f91fff69a13.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\com.android.support-support-v4-23.3.0_fa179052d8667b3f5b1696d16d61b01eb0b8053b.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\barCodeTest\unspecified\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="4d5ad7a8e949848af41d50a045c1edcba90deba0">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17-barCodeTest-unspecified_b88e2cf2a72efd301f0260a4642089f279109157.jar" />
+    </item>
+    <item
+        jar="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\exploded-aar\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\barCodeTest\unspecified\jars\libs\zxing.jar"
+        jumboMode="false"
+        revision="23.0.3"
+        sha1="83d0573044624f8ce7dac5c196b29b7687b977b6">
+        <dex dex="F:\zhou\2016\BleCentral_phone_port-7598f849854cea7fa0a828aea63a69fbc2188e17\app\build\intermediates\pre-dexed\release\zxing_cee48960900a33ea002aae423d9b21ab2d0e21d8.jar" />
+    </item>
+
+</items>

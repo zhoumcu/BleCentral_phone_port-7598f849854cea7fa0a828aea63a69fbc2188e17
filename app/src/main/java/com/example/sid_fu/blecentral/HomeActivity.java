@@ -20,9 +20,8 @@ import com.example.sid_fu.blecentral.activity.CarListViewActivity;
 import com.example.sid_fu.blecentral.activity.MainFrameForStartServiceActivity;
 import com.example.sid_fu.blecentral.adapter.DeviceAdapter;
 import com.example.sid_fu.blecentral.db.dao.DeviceDao;
-import com.example.sid_fu.blecentral.db.dao.UserDao;
 import com.example.sid_fu.blecentral.db.entity.Device;
-import com.example.sid_fu.blecentral.db.entity.User;
+import com.example.sid_fu.blecentral.helper.HomeDataHelper;
 import com.example.sid_fu.blecentral.ui.activity.BaseActivity;
 import com.example.sid_fu.blecentral.utils.BitmapUtils;
 import com.example.sid_fu.blecentral.utils.Logger;
@@ -250,46 +249,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener{
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString("result");
-//            ToastUtil.show(scanResult);
-            //resultTextView.setText(scanResult);
             Logger.e("结果为："+scanResult);
             String[] date = scanResult.split("\\|");
-            Logger.e(date.length+"");
-            if (date[0].equals("vlt_tpms_device")&&date.length==8) {
-                Logger.e(date[0]);
-                //添加数据
-                User user = new UserDao(this).get(1);
-                Device deviceDate = new Device();
-                deviceDate.setDeviceName(date[5]+"--授权");
-                deviceDate.setDeviceDescripe(date[6]);
-                deviceDate.setImagePath(date[7]);
-                deviceDate.setRight_BD(date[4]);
-                deviceDate.setLeft_BD(date[3]);
-                deviceDate.setRight_FD(date[2]);
-                deviceDate.setLeft_FD(date[1]);
-                deviceDate.setIsShare("true");
-                deviceDate.setUser(user);
-                new DeviceDao(this).add(deviceDate);
-                //刷新列表
-                refreash();
-            }else if (date[0].equals("vlt_tpms_device")&&date.length==7) {
-                Logger.e(date[0]);
-                //添加数据
-                User user = new UserDao(this).get(1);
-                Device deviceDate = new Device();
-                deviceDate.setDeviceName(date[5]+"--授权");
-                deviceDate.setDeviceDescripe(date[6]);
-//                deviceDate.setImagePath(date[7]);
-                deviceDate.setRight_BD(date[4]);
-                deviceDate.setLeft_BD(date[3]);
-                deviceDate.setRight_FD(date[2]);
-                deviceDate.setLeft_FD(date[1]);
-                deviceDate.setIsShare("true");
-                deviceDate.setUser(user);
-                new DeviceDao(this).add(deviceDate);
-                //刷新列表
-                refreash();
-            }
+            new DeviceDao(this).add(HomeDataHelper.getData(this,date));
         }
     }
 
