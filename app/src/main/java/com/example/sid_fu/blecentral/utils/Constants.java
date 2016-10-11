@@ -41,4 +41,7 @@ public class Constants {
     public static final int MYSQL_DEVICE_ID = 10;
     public static final String IS_CONFIG = "is_config_device";
     public static final String MY_CAR_DEVICE = "my_car_device";
+    public static final String PRESSUER_DW_NUM = "PRESSUER_DW_NUM";
+    public static final String TEMP_DW_NUM = "TEMP_DW_NUM";
+    public static final boolean NO_SHOW_VOL = true;
 }

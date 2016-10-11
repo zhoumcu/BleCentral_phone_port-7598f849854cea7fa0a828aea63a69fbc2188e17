@@ -92,8 +92,7 @@ public class MainPagerFragment extends BaseFragment {
         mHandler.postDelayed(runnable, 60000);
     }
 
-    private Handler  mHandler = new Handler()
-    {
+    private Handler  mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -209,42 +208,7 @@ public class MainPagerFragment extends BaseFragment {
     private void bleStringToDouble(BluetoothDevice device, boolean isNotify,byte[] data) {
         BleData bleData = DataHelper.getData(data);
         showDataForUI(device.getAddress(),bleData);
-        if(device.getAddress().equals(mActivity.manageDevice.getLeftBDevice())) {
-            handleException(bleData, mActivity.manageDevice.getLeftBDevice());
-            //开启定时器用于监听数据
-            if(mActivity.manageDevice.disLeftBCount==1) {
-                mHandler.removeCallbacks(leftBRunnable);
-                mActivity.manageDevice.disLeftBCount = 0;
-            }
-            mActivity.manageDevice.disLeftBCount++;
-            mHandler.postDelayed(leftBRunnable, DISTIME);// 打开定时器，执行操作
-        }else if(device.getAddress().equals(mActivity.manageDevice.getRightBDevice())) {
-            handleException(bleData, mActivity.manageDevice.getRightBDevice());
-            if(mActivity.manageDevice.disRightBCount==1) {
-                mHandler.removeCallbacks(rightBRunnable);
-                mActivity.manageDevice.disRightBCount = 0;
-            }
-            mActivity.manageDevice.disRightBCount++;
-            mHandler.postDelayed(rightBRunnable, DISTIME);// 打开定时器，执行操作
-
-        }else if(device.getAddress().equals(mActivity.manageDevice.getLeftFDevice())) {
-            handleException(bleData, mActivity.manageDevice.getLeftFDevice());
-            if(mActivity.manageDevice.disLeftFCount==1) {
-                mHandler.removeCallbacks(leftFRunnable);
-                mActivity.manageDevice.disLeftFCount = 0;
-            }
-            mActivity.manageDevice.disLeftFCount++;
-            mHandler.postDelayed(leftFRunnable, DISTIME);// 打开定时器，执行操作
-
-        }else if(device.getAddress().equals(mActivity.manageDevice.getRightFDevice())) {
-            handleException(bleData, mActivity.manageDevice.getRightFDevice());
-            if(mActivity.manageDevice.disRightFCount==1) {
-                mHandler.removeCallbacks(rightFRunnable);
-                mActivity.manageDevice.disRightFCount = 0;
-            }
-            mActivity.manageDevice.disRightFCount++;
-            mHandler.postDelayed(rightFRunnable, DISTIME);// 打开定时器，执行操作
-        }
+        handleException(device,bleData);
         RecordData recordData = new RecordData();
         recordData.setName(device.getAddress());
         recordData.setData(DigitalTrans.byte2hex(data));
@@ -253,20 +217,52 @@ public class MainPagerFragment extends BaseFragment {
     }
 
     private void bleStringToDouble(RecordData recordData) {
+        if(recordData.getData()==null||recordData==null) return;
         byte[] data = DigitalTrans.hex2byte(recordData.getData());
         BleData bleData = DataHelper.getData(data);
         showDataForUI(recordData.getName(),bleData);
+        handleException(recordData.getName(),bleData);
+    }
 
-        if(recordData.getName().equals(mActivity.manageDevice.getLeftBDevice())) {
+    private void handleException(BluetoothDevice device,BleData bleData){
+        this.handleException(device.getAddress(),bleData);
+    }
+    private void handleException(String device,BleData bleData){
+        if(device.equals(mActivity.manageDevice.getLeftBDevice())) {
             handleException(bleData, mActivity.manageDevice.getLeftBDevice());
-        }else if(recordData.getName().equals(mActivity.manageDevice.getRightBDevice())) {
+            //开启定时器用于监听数据
+            if(mActivity.manageDevice.disLeftBCount==1) {
+                mHandler.removeCallbacks(leftBRunnable);
+                mActivity.manageDevice.disLeftBCount = 0;
+            }
+            mActivity.manageDevice.disLeftBCount++;
+            mHandler.postDelayed(leftBRunnable, DISTIME);// 打开定时器，执行操作
+        }else if(device.equals(mActivity.manageDevice.getRightBDevice())) {
             handleException(bleData, mActivity.manageDevice.getRightBDevice());
+            if(mActivity.manageDevice.disRightBCount==1) {
+                mHandler.removeCallbacks(rightBRunnable);
+                mActivity.manageDevice.disRightBCount = 0;
+            }
+            mActivity.manageDevice.disRightBCount++;
+            mHandler.postDelayed(rightBRunnable, DISTIME);// 打开定时器，执行操作
 
-        }else if(recordData.getName().equals(mActivity.manageDevice.getLeftFDevice())) {
+        }else if(device.equals(mActivity.manageDevice.getLeftFDevice())) {
             handleException(bleData, mActivity.manageDevice.getLeftFDevice());
+            if(mActivity.manageDevice.disLeftFCount==1) {
+                mHandler.removeCallbacks(leftFRunnable);
+                mActivity.manageDevice.disLeftFCount = 0;
+            }
+            mActivity.manageDevice.disLeftFCount++;
+            mHandler.postDelayed(leftFRunnable, DISTIME);// 打开定时器，执行操作
 
-        }else if(recordData.getName().equals(mActivity.manageDevice.getRightFDevice())) {
+        }else if(device.equals(mActivity.manageDevice.getRightFDevice())) {
             handleException(bleData, mActivity.manageDevice.getRightFDevice());
+            if(mActivity.manageDevice.disRightFCount==1) {
+                mHandler.removeCallbacks(rightFRunnable);
+                mActivity.manageDevice.disRightFCount = 0;
+            }
+            mActivity.manageDevice.disRightFCount++;
+            mHandler.postDelayed(rightFRunnable, DISTIME);// 打开定时器，执行操作
         }
     }
     private void handleException(BleData date, String str) {
@@ -336,25 +332,9 @@ public class MainPagerFragment extends BaseFragment {
             bleIsExceptionForNight(strAddress,noticeStr);
         }
     }
-
-
-//    private void showDialog(String str,int number)
-//    {
-//        if(!loadDialog.isShowing())
-//        {
-//            loadDialog.setText(str);
-//            loadDialog.show();
-//            loadDialog.setCountNum(number);
-//        }else{
-//            loadDialog.setCountNum(number);
-//        }
-//    }
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        myTimerTask.cancel();
-//        myTimerTask = null;
-//        timer = null;
         getActivity().unregisterReceiver(mGattUpdateReceiver);
     }
 }

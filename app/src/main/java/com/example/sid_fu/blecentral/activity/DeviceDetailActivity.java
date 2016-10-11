@@ -1,14 +1,12 @@
 package com.example.sid_fu.blecentral.activity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,8 +18,6 @@ import com.example.sid_fu.blecentral.db.dao.UserDao;
 import com.example.sid_fu.blecentral.db.entity.Device;
 import com.example.sid_fu.blecentral.db.entity.User;
 import com.example.sid_fu.blecentral.ui.activity.BaseActionBarActivity;
-import com.example.sid_fu.blecentral.utils.Constants;
-import com.example.sid_fu.blecentral.utils.SharedPreferences;
 import com.example.sid_fu.blecentral.widget.PictureView;
 import com.google.zxing.WriterException;
 import com.zxing.encoding.EncodingHandler;
@@ -94,8 +90,7 @@ public class DeviceDetailActivity extends BaseActionBarActivity {
         startActivity(intent);
     }
     @OnClick (R.id.btn_add)
-    public void addDate()
-    {
+    public void addDate() {
         if(!TextUtils.isEmpty(editText.getText().toString())&&!TextUtils.isEmpty(edName.getText().toString()))
         {
             User u = new User();

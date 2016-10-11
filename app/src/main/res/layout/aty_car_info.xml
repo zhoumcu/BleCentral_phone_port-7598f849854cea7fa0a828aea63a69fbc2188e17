@@ -7,6 +7,8 @@
     android:background="@mipmap/am_bg_g"
     >
 
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -299,16 +301,18 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:ems="10"
                         android:id="@+id/edf_min"
                         android:text="1.8"
+                        android:maxLength="3"
+                        android:inputType="numberDecimal"
                         android:layout_column="2" />
 
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:maxLength="3"
+                        android:inputType="numberDecimal"
                         android:ems="10"
                         android:id="@+id/edf_mid"
                         android:text="2.4"
@@ -317,7 +321,8 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:maxLength="3"
+                        android:inputType="numberDecimal"
                         android:ems="10"
                         android:id="@+id/edf_max"
                         android:text="3.2"
@@ -339,7 +344,8 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:maxLength="3"
+                        android:inputType="numberDecimal"
                         android:ems="10"
                         android:id="@+id/edb_min"
                         android:text="1.8"
@@ -348,7 +354,8 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:maxLength="3"
+                        android:inputType="numberDecimal"
                         android:ems="10"
                         android:id="@+id/edb_mid"
                         android:text="2.4"
@@ -357,7 +364,8 @@
                     <EditText
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:maxLength="3"
+                        android:inputType="numberDecimal"
                         android:ems="10"
                         android:id="@+id/edb_max"
                         android:text="3.2"
@@ -371,7 +379,6 @@
 
         </LinearLayout>
     </ScrollView>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -381,5 +388,4 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:id="@+id/btn_add" />
-
 </LinearLayout>

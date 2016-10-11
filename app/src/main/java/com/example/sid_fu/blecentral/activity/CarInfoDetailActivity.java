@@ -2,7 +2,6 @@ package com.example.sid_fu.blecentral.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -90,13 +88,6 @@ public class CarInfoDetailActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(SharedPreferences.getInstance().getString(Constants.LANDORPORT,Constants.DEFIED).equals("横屏"))
-//        {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//设置成全屏模式
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//强制为横屏
-//        }else{
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
-//        }
         setContentView(R.layout.aty_car_info);
         ButterKnife.bind(this);
          /*显示App icon左侧的back键*/
@@ -106,12 +97,10 @@ public class CarInfoDetailActivity extends BaseActionBarActivity {
         App.getInstance().addActivity(this);
         intitDatas();
         intView();
-
         App.getInstance().speak("请选择轮胎型号");
     }
 
     private void intView() {
-
     }
 
     private void intitDatas() {
@@ -169,8 +158,7 @@ public class CarInfoDetailActivity extends BaseActionBarActivity {
                     Float.valueOf(edbMin.getText().toString())<Float.valueOf(edbMax.getText().toString())&&
                     Float.valueOf(edfMin.getText().toString())<Float.valueOf(edfMid.getText().toString())&&
                     Float.valueOf(edfMid.getText().toString())<Float.valueOf(edfMax.getText().toString())&&
-                    Float.valueOf(edfMin.getText().toString())<Float.valueOf(edfMax.getText().toString()))
-            {
+                    Float.valueOf(edfMin.getText().toString())<Float.valueOf(edfMax.getText().toString())) {
                 if (carBrand != null)
                     newDataId = DbHelper.getInstance(this).saveCarInfo(carBrand);
                 if (newDataId > 0) {
@@ -196,8 +184,7 @@ public class CarInfoDetailActivity extends BaseActionBarActivity {
                     }).show();//在按键响应事件中显示此对话框
                 }
 //                App.getInstance().speak("保存成功，是否开始配对，如果是，请将手机贴近左前轮气嘴位置处，点击开始配对；如果不想进行配对，请点击返回首页，下次进行配对！");
-            }else
-            {
+            }else {
                 ToastUtil.show("胎压推荐值有错误");
             }
         } else {
@@ -324,5 +311,14 @@ public class CarInfoDetailActivity extends BaseActionBarActivity {
 
 
         return bitmap;
+    }
+
+    private boolean verifyNumber(EditText minNum,EditText midNum,EditText maxNum){
+        float minData = Float.valueOf(minNum.getText().toString());
+        float midData = Float.valueOf(midNum.getText().toString());
+        float maxData = Float.valueOf(maxNum.getText().toString());
+        if(minData<0.0f||midData<0.0f||maxData<0.0f) return false;
+        if(minData<midData&&midData<maxData&&minData<maxData) return true;
+        return false;
     }
 }

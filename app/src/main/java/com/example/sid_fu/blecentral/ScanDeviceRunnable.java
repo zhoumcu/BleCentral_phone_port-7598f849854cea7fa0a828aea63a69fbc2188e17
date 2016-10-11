@@ -11,8 +11,7 @@ public class ScanDeviceRunnable implements Runnable {
     private final int type;
     private final Handler handler;
 
-    public ScanDeviceRunnable(Handler handler, int type)
-    {
+    public ScanDeviceRunnable(Handler handler, int type) {
         this.type = type;
         this.handler = handler;
     }

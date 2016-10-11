@@ -101,7 +101,6 @@ public class MainFrameForStartServiceActivity extends BaseActionBarActivity impl
         }catch (InflateException e) {
         }
         mContext =MainFrameForStartServiceActivity.this;
-//        deviceId = SharedPreferences.getInstance().getInt(Constants.LAST_ID, getIntent().getExtras().getInt("DB_ID"));
         deviceId = getIntent().getExtras().getInt("DB_ID");
         SharedPreferences.getInstance().putInt(Constants.LAST_ID, deviceId);
         initUI();

@@ -80,20 +80,6 @@ public class PersonSetting extends BaseActionBarActivity implements View.OnClick
         });
 //        findViewById(R.id.bg_ground).setBackgroundDrawable(new BitmapDrawable(BitmapUtils.readBitMap(mContext,R.mipmap.g_bg)));
         tvEmail.setText(SharedPreferences.getInstance().getString("telephone", "10086"));
-//        try {
-//            contentString = "vlt_tpms_device" + "|" + articles.get(0).getLeft_FD() + "|" + articles.get(0).getRight_FD() + "|" + articles.get(0).getLeft_BD() + "|" + articles.get(0).getRight_BD();//"mac1:4564564654+mac2:78132132";
-//            if (!contentString.equals("")) {
-//                //根据字符串生成二维码图片并显示在界面上，第二个参数为图片的大小（350*350）
-//                Bitmap qrCodeBitmap = EncodingHandler.createQRCode(contentString, 350);
-//                imgQcode.setImageBitmap(qrCodeBitmap);
-//            } else {
-//                Toast.makeText(PersonSetting.this, "Text can not be empty", Toast.LENGTH_SHORT).show();
-//            }
-//
-//        } catch (WriterException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
         tvPreesure.setText(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar"));
         tvTemp.setText(SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃"));
         tvLandPort.setText(SharedPreferences.getInstance().getString(Constants.LANDORPORT,Constants.DEFIED));
@@ -118,10 +104,11 @@ public class PersonSetting extends BaseActionBarActivity implements View.OnClick
     public void choocesPre() {
         new AlertDialog.Builder(this)
                 .setTitle("气压单位")
-                .setSingleChoiceItems(R.array.pressure, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(R.array.pressure, SharedPreferences.getInstance().getInt(Constants.PRESSUER_DW_NUM,0), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String hoddy = getResources().getStringArray(R.array.pressure)[which];
                         tvPreesure.setText(hoddy);
+                        SharedPreferences.getInstance().putInt(Constants.PRESSUER_DW_NUM, which);
                         SharedPreferences.getInstance().putString(Constants.PRESSUER_DW, hoddy);
                         dialog.dismiss();
                     }
@@ -156,10 +143,11 @@ public class PersonSetting extends BaseActionBarActivity implements View.OnClick
     public void choocesTemp() {
         new AlertDialog.Builder(this)
                 .setTitle("温度单位")
-                .setSingleChoiceItems(R.array.temp, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(R.array.temp, SharedPreferences.getInstance().getInt(Constants.TEMP_DW_NUM,0), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String hoddy = getResources().getStringArray(R.array.temp)[which];
                         tvTemp.setText(hoddy);
+                        SharedPreferences.getInstance().putInt(Constants.TEMP_DW_NUM, which);
                         SharedPreferences.getInstance().putString(Constants.TEMP_DW, hoddy);
                         dialog.dismiss();
                     }
