@@ -1,12 +1,19 @@
 package com.example.sid_fu.blecentral.helper;
 
+import com.example.sid_fu.blecentral.ManageDevice;
 import com.example.sid_fu.blecentral.ui.BleData;
 import com.example.sid_fu.blecentral.utils.Constants;
+import com.example.sid_fu.blecentral.utils.DataUtils;
 import com.example.sid_fu.blecentral.utils.DigitalTrans;
 import com.example.sid_fu.blecentral.utils.Logger;
 import com.example.sid_fu.blecentral.utils.SharedPreferences;
 
 import java.text.DecimalFormat;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * author：Administrator on 2016/9/28 08:54
@@ -18,10 +25,16 @@ public class DataHelper {
 
     public DataHelper() {
     }
+    public static BleData getScanData(byte[] scanRecord){
+        Logger.e(":"+ DataUtils.bytesToHexString(scanRecord));
+        byte[] data = DataUtils.parseData(scanRecord).datas;
+        return getData(data);
+    }
     public static BleData getData(byte[] data){
         float voltage = 0.00f,press = 0, temp =0;
         int temp1 = 0,state = 0,rssi = 0;
-        DecimalFormat df = new DecimalFormat("######0");
+        String pressStr = "";
+        DecimalFormat df = new DecimalFormat("######0.0");
         BleData bleData = new BleData();
         if(data==null) return bleData;
         if(data.length==0) return bleData;
@@ -30,12 +43,15 @@ public class DataHelper {
             press = ((float)DigitalTrans.byteToAlgorism(data[1])*160)/51/100;
             temp = (float)(DigitalTrans.byteToAlgorism(data[2])-50);
             state = DigitalTrans.byteToBin0x0F(data[0]);
+            press = Math.round(press*10)*0.1f;
             if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
-
+                pressStr = df.format(press);
             }else if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
-                press = press*102;
+                press = Math.round(press*102*10)*0.1f;
+                pressStr = String.valueOf(press);
             }else{
-                press = press*14.5f;
+                press = Math.round(press*14.5f*10)*0.1f;
+                pressStr = String.valueOf(press);
             }
 
             if(SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃").equals("℃")) {
@@ -48,12 +64,15 @@ public class DataHelper {
             press = ((float)DigitalTrans.byteToAlgorism(data[1])*160)/51/100;
             temp = (float)(DigitalTrans.byteToAlgorism(data[2])-50);
             state = DigitalTrans.byteToBin0x0F(data[0]);
+            press = Math.round(press*10)*0.1f;
             if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
-
+                pressStr = df.format(press);
             }else if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
-                press = press*102;
+                press = Math.round(press*102*10)*0.1f;
+                pressStr = String.valueOf(press);
             }else{
-                press = press*14.5f;
+                press = Math.round(press*14.5f*10)*0.1f;
+                pressStr = String.valueOf(press);
             }
             if(SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃").equals("℃")) {
                 temp1 = (int)temp;
@@ -62,10 +81,68 @@ public class DataHelper {
             }
         }
         Logger.e("状态："+state+"\n"+"压力值："+press+"\n"+"温度："+temp+"\n"+"电压"+voltage+"");
+        //计算异常情况
         bleData.setTemp (temp1);
         bleData.setPress(press);
+        bleData.setStringPress(pressStr);
         bleData.setStatus(state);
         bleData.setVoltage(voltage);
-        return bleData;
+        bleData.setData(DigitalTrans.byte2hex(data));
+        return handleException(bleData);
+    }
+
+    private static BleData handleException(BleData date) {
+        StringBuffer buffer = new StringBuffer();
+        float maxPress, minPress, maxTemp;
+        if (SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
+            maxPress = 3.20f;
+            minPress = 1.800f;
+        } else if (SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
+            maxPress = 3.20f * 102;
+            minPress = 1.800f * 102;
+        } else {
+            maxPress = 3.20f * 14.5f;
+            minPress = 1.800f * 14.5f;
+        }
+        if (SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃").equals("℃")) {
+            maxTemp = 65;
+        } else {
+            maxTemp = (int) (65 * 1.80f) + 32;
+        }
+        Logger.e("maxPress" + maxPress + "minPress" + minPress + "maxTemp" + maxTemp);
+        buffer.append(date.getPress() > maxPress ? "高压" + " " : "");
+        buffer.append(date.getPress() < minPress ? "低压" + " " : "");
+        buffer.append(date.getTemp() > maxTemp ? "高温" + " " : "");
+//        buffer.append(date.getTemp() < 20 ? "低温" + " " : "");
+        ManageDevice.status[] statusData = ManageDevice.status.values();
+        //状态检测
+        if (date.getStatus() == 8 || date.getStatus() == 0) {
+
+        } else {
+            buffer.append(statusData[date.getStatus()] + " ");
+        }
+        if (buffer.toString().contains("快漏气")||date.getPress() > maxPress || date.getPress() < minPress || date.getTemp() >= maxTemp ? true: false) {
+            //高压
+            date.setIsError(true);
+        }else {
+            //正常
+            date.setIsError(false);
+        }
+        date.setErrorState(buffer.toString());
+        return date;
+    }
+    public static Observable<BleData> getBleData(final byte[] data) {
+        return Observable.create(new Observable.OnSubscribe<BleData>() {
+            @Override
+            public void call(Subscriber<? super BleData> subscriber) {
+                subscriber.onNext(getScanData(data));
+            }
+        });
+    }
+    private <T> void toSubscribe(Observable<T> o,Subscriber<T> s){
+        o.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s);
     }
 }

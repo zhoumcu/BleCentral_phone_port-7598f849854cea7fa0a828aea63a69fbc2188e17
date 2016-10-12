@@ -6,8 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.io.Serializable;
 
 @DatabaseTable(tableName = "tb_device")
-public class Device implements Serializable
-{
+public class Device implements Serializable {
 	private static final long serialVersionUID = -7060210544600464481L;
 
 	@DatabaseField(generatedId = true)

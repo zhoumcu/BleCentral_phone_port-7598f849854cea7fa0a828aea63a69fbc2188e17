@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by Administrator on 2016/6/28.
  */
@@ -107,6 +109,7 @@ public class DbHelper {
 //                cursor.moveToNext();
             }
         }
+        cursor.close();
         return carBrands;
     }
 
@@ -151,6 +154,7 @@ public class DbHelper {
             carBrand.setId(ids);
             carBrand.setBrandName(brandName);
         }
+        cursor.close();
         return carBrand;
     }
 
@@ -187,6 +191,7 @@ public class DbHelper {
 //                cursor.moveToNext();
             }
         }
+        cursor.close();
         return SourceDateList;
     }
     public List<CarBrand> getCarList() throws NullPointerException {
@@ -216,6 +221,7 @@ public class DbHelper {
 //                cursor.moveToNext();
             }
         }
+        cursor.close();
         return carBrands;
     }
 
@@ -242,6 +248,7 @@ public class DbHelper {
 //                cursor.moveToNext();
             }
         }
+        cursor.close();
         return carBrands;
     }
 
@@ -267,7 +274,9 @@ public class DbHelper {
         //getCarInfo();
         Cursor cursor = database.rawQuery("select max(id) as uid from car_info", null);
         cursor.moveToFirst();
-        return cursor.getInt(cursor.getColumnIndex("uid"));
+        int count = cursor.getInt(cursor.getColumnIndex("uid"));
+        cursor.close();
+        return count;
     }
     public void updateCarInfo(CarBrand carBrand, int id) {
         // 查找单词的SQL语句
@@ -316,6 +325,7 @@ public class DbHelper {
             carBrand.setBrandName(brandName);
             Logger.e( "success:"+carBrand.toString());
         }
+        cursor.close();
         return carBrand;
     }
     public void insertCarData(RecordData data) throws SQLiteCantOpenDatabaseException {
@@ -344,18 +354,18 @@ public class DbHelper {
         database.update("car_data", cv,"deviceId = ? and name =?",new String[]{String.valueOf(id),name});
 //        getUserCarInfo(id);
     }
-    public void update(int deviceId,String name,RecordData data) {
-        if(TextUtils.isEmpty(name))return;
-        if(database==null) return ;
+    public boolean update(int deviceId, String name, RecordData data) {
+        if(TextUtils.isEmpty(name)) return false;
+        if(database==null) return false;
         try {
             String sql = "select * from car_data where deviceId = ? and name = ?";
             Cursor cursor = database.rawQuery(sql, new String[]{String.valueOf(deviceId),name});
             // 必须使用moveToFirst方法将记录指针移动到第1条记录的位置
 //        cursor.moveToFirst();
-            while (cursor.moveToNext()) {
-                String name1 = cursor.getString(cursor.getColumnIndex("name"));
-                Logger.e(name1);
-            }
+//            while (cursor.moveToNext()) {
+//                String name1 = cursor.getString(cursor.getColumnIndex("name"));
+//                Logger.e(name1);
+//            }
             if(cursor.getCount()>0) {
                 Logger.e("更新数据");
                 updateCarData(deviceId,name,data);
@@ -363,13 +373,18 @@ public class DbHelper {
                 Logger.e("插入新数据");
                 insertCarData(data);
             }
+            cursor.close();
+            return true;
         }catch (IllegalArgumentException e) {
-
         }catch (NullPointerException e1) {
-
         }catch (SQLiteCantOpenDatabaseException e2) {
+        }catch (Exception e){
 
         }
+        return false;
+    }
+    public Observable<Boolean> updateRecord(int deviceId,String name,RecordData data) {
+        return Observable.just(update(deviceId,name,data));
     }
     public List<RecordData> getCarDataList(int deviceId) throws SQLiteException {
         // 查找单词的SQL语句
@@ -401,6 +416,7 @@ public class DbHelper {
 //                cursor.moveToNext();
             }
         }
+        cursor.close();
         return carBrands;
     }
 }

@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.UiThread;
 import android.util.Log;
 
 import com.example.sid_fu.blecentral.db.entity.Device;
@@ -53,6 +54,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
@@ -131,8 +135,7 @@ public class BluetoothLeStartService extends Service {
     private Timer timer;
     private boolean isSend;
 
-    public void findService(BluetoothGatt gatt)
-    {
+    public void findService(BluetoothGatt gatt) {
 //        List<BluetoothGattService> gattServices = gatt.getServices();
 //        displayGattServices(gattServices);
         BluetoothGattCharacteristic gattCharacteristic = gatt.getService(UUID_SERVICE).getCharacteristic(UUID_CHAR);
@@ -157,8 +160,7 @@ public class BluetoothLeStartService extends Service {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String intentAction;
             Logger.i(TAG, "oldStatus=" + status + " NewStates=" + newState);
-            if(status == BluetoothGatt.GATT_SUCCESS)
-            {
+            if(status == BluetoothGatt.GATT_SUCCESS) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     gatt.discoverServices();
                     intentAction = ACTION_GATT_CONNECTED;
@@ -446,12 +448,9 @@ public class BluetoothLeStartService extends Service {
         return true;
     }
 
-    private boolean checkGattForDevice(BluetoothDevice device)
-    {
-        for (int j=0;j<connectionQueue.size();j++)
-        {
-            if(connectionQueue.get(j).getDevice().getAddress().equals(device.getAddress()))
-            {
+    private boolean checkGattForDevice(BluetoothDevice device) {
+        for (int j=0;j<connectionQueue.size();j++) {
+            if(connectionQueue.get(j).getDevice().getAddress().equals(device.getAddress())) {
                 Logger.i("gatt存在，直接连"+device.getAddress());
                 connectionQueue.get(j).connect();
                 return true;
@@ -509,8 +508,7 @@ public class BluetoothLeStartService extends Service {
                 }).start();
 
             }
-        }else
-        {
+        }else {
             if(bluetoothGatt ==null) return;
                 new Thread(new Runnable() {
                 public void run() {
@@ -571,15 +569,13 @@ public class BluetoothLeStartService extends Service {
         if (connectionQueue.isEmpty()&&!Constants.SINGLE_BLE) {
             return;
         }
-        if(!Constants.SINGLE_BLE)
-        {
+        if(!Constants.SINGLE_BLE) {
             for ( BluetoothGatt bluetoothGatt : connectionQueue) {
                 bluetoothGatt.close();
             }
             connectionQueue.clear();
             connectDevice.clear();
-        }else
-        {
+        }else {
             if(bluetoothGatt!=null)
                 bluetoothGatt.close();
         }
@@ -896,14 +892,12 @@ public class BluetoothLeStartService extends Service {
     {
         return this.connectionQueue;
     }
-    public void removeBluethGatt(BluetoothGatt gatt)
-    {
+    public void removeBluethGatt(BluetoothGatt gatt) {
         gatt.disconnect();
         connectionQueue.remove(gatt);
     }
 
-    public void showDialog()
-    {
+    public void showDialog() {
         /*
         new AlertDialog.Builder(this)
                 .setTitle("系统提示")
@@ -1019,15 +1013,20 @@ public class BluetoothLeStartService extends Service {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
                 mBluetoothAdapter.startLeScan(mLeScanCallback);
             }*/
-            Logger.i("后台接收广播数据："+device.getAddress()+SharedPreferences.getInstance().getBoolean("isAppOnForeground",false));
-            broadcastUpdate(SCAN_FOR_RESULT,device,rssi,scanRecord);
-            //如何应用退至后台，发送异常通知
-            if(SharedPreferences.getInstance().getBoolean("isAppOnForeground",false)&&(isNull(deviceDetails.getLeft_BD(),device.getAddress())||isNull(deviceDetails.getLeft_FD(),device.getAddress())||
-                    isNull(deviceDetails.getRight_BD(),device.getAddress())||isNull(deviceDetails.getRight_FD(),device.getAddress()))) {
-                ParsedAd ad = DataUtils.parseData(scanRecord);
-                bleStringToDouble(device,true,ad.datas);
-                Logger.i("收到广播===================================="+device.getAddress());
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Logger.i("后台接收广播数据："+device.getAddress()+SharedPreferences.getInstance().getBoolean("isAppOnForeground",false));
+                    broadcastUpdate(SCAN_FOR_RESULT,device,rssi,scanRecord);
+                    //如何应用退至后台，发送异常通知
+                    if(SharedPreferences.getInstance().getBoolean("isAppOnForeground",false)&&(isNull(deviceDetails.getLeft_BD(),device.getAddress())||isNull(deviceDetails.getLeft_FD(),device.getAddress())||
+                            isNull(deviceDetails.getRight_BD(),device.getAddress())||isNull(deviceDetails.getRight_FD(),device.getAddress()))) {
+                        ParsedAd ad = DataUtils.parseData(scanRecord);
+                        bleStringToDouble(device,true,ad.datas);
+                        Logger.i("收到广播===================================="+device.getAddress());
+                    }
+                }
+            }).start();
         }
     };
     private boolean isNull(String device,String str) {
@@ -1055,8 +1054,7 @@ public class BluetoothLeStartService extends Service {
         BleData bleData = new BleData();
         Logger.e(DigitalTrans.byte2hex(data));
         if(data==null) return;
-        if(isNotify&&data.length==4)
-        {
+        if(isNotify&&data.length==4) {
             press = ((float)DigitalTrans.byteToAlgorism(data[1])*160)/51/100;
             voltage = ((float)(DigitalTrans.byteToAlgorism(data[3])-31)*20/21+160)/100;
             temp = DigitalTrans.byteToAlgorism(data[2])-50;

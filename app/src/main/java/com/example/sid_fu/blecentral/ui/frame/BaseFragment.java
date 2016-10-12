@@ -21,7 +21,6 @@ import com.example.sid_fu.blecentral.activity.MainFrameForStartServiceActivity;
 import com.example.sid_fu.blecentral.db.DbHelper;
 import com.example.sid_fu.blecentral.db.entity.RecordData;
 import com.example.sid_fu.blecentral.ui.BleData;
-import com.example.sid_fu.blecentral.utils.CommonUtils;
 import com.example.sid_fu.blecentral.utils.Constants;
 import com.example.sid_fu.blecentral.utils.DimenUtil;
 import com.example.sid_fu.blecentral.utils.Logger;
@@ -116,7 +115,6 @@ public abstract class BaseFragment extends Fragment{
         String SYSTEM_REASON = "reason";
         String SYSTEM_HOME_KEY = "homekey";
         String SYSTEM_HOME_KEY_LONG = "recentapps";
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -294,7 +292,6 @@ public abstract class BaseFragment extends Fragment{
                 topleft_temp.setText(getActivity().getString(R.string.defaulttemp));
                 topleft_preesure.setText(getActivity().getString(R.string.defaulttemp));
                 topleft_releat.setText("");
-
                 recordData.setName(mActivity.manageDevice.getLeftFDevice());
                 DbHelper.getInstance(getActivity()).update(mActivity.deviceId,mActivity.manageDevice.getLeftFDevice(),recordData);
 
@@ -569,14 +566,9 @@ public abstract class BaseFragment extends Fragment{
      * @param bleData
      */
     public void showDataForUI(String device , BleData bleData) {
-        String barData;
         if(context.isFinishing()) return;
-        if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
-            barData = df.format(bleData.getPress());
-        }else {
-            barData = String.valueOf(Math.round(bleData.getPress()));
-        }
-        Logger.e(barData);
+        setUnitTextSize();
+        String barData = bleData.getStringPress();
         if(device.equals(mActivity.manageDevice.getLeftBDevice())) {
             bottomleft_preesure.setText(barData);
             bottomleft_temp.setText(String.valueOf(bleData.getTemp()));
@@ -634,14 +626,8 @@ public abstract class BaseFragment extends Fragment{
         }
     }
     public void setUnitTextSize() {
-        float rate;
         if(context.isFinishing()) return;
-        if(SharedPreferences.getInstance().getString(Constants.LANDORPORT,Constants.DEFIED).equals("横屏")) {
-            rate = (float) (CommonUtils.getScreenHeight(getActivity()) / 480)*18;
-        }else{
-            rate = (float) (CommonUtils.getScreenWidth(getActivity()) / 480)*15;
-        }
-
+        int rate = DimenUtil.adjustFontSize(context);
         Logger.e("字体大小："+rate);
         if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
             topleft_preesure.setTextSize(rate);
@@ -654,7 +640,6 @@ public abstract class BaseFragment extends Fragment{
             bottomleft_preesure.setTextSize(getResources().getDimension(R.dimen.press_size_kpa));
             bottomright_preesure.setTextSize(getResources().getDimension(R.dimen.press_size_kpa));
         }
-
     }
     @Override
     public void onDestroyView() {

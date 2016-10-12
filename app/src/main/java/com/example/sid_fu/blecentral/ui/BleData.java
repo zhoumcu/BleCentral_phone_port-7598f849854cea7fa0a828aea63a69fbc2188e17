@@ -16,6 +16,10 @@ public class BleData {
     private int viewPosition;
     private boolean exception;
     private boolean noReceviceData;
+    private String data;
+    private String stringPress;
+    private String errorState;
+    private boolean error;
 
     public int getRssi() {
         return rssi;
@@ -122,5 +126,37 @@ public class BleData {
 
     public boolean isNoReceviceData() {
         return noReceviceData;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setStringPress(String stringPress) {
+        this.stringPress = stringPress;
+    }
+
+    public String getStringPress() {
+        return stringPress;
+    }
+
+    public void setErrorState(String errorState) {
+        this.errorState = errorState;
+    }
+
+    public String getErrorState() {
+        return errorState;
+    }
+
+    public void setIsError(boolean isError) {
+        this.error = isError;
+    }
+
+    public boolean isError() {
+        return error;
     }
 }

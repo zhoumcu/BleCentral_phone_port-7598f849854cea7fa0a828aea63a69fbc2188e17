@@ -1,6 +1,8 @@
 package com.example.sid_fu.blecentral.utils;
 
+import android.content.Context;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.example.sid_fu.blecentral.App;
 
@@ -124,4 +126,22 @@ public class DimenUtil {
         return App.getInstance().getResources().getDimension(resId);
     }
 
+    public static int adjustFontSize(Context context){
+        WindowManager wm = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
+        int screenWidth = wm.getDefaultDisplay().getWidth();
+        if (screenWidth <= 240) {        // 240X320 屏幕
+            return 10;
+        }else if (screenWidth <= 320){   // 320X480 屏幕
+            return 14;
+        }else if (screenWidth <= 480){   // 480X800 或 480X854 屏幕
+            return 24;
+        }else if (screenWidth <= 540){   // 540X960 屏幕
+            return 26;
+        }else if(screenWidth <= 800){    // 800X1280 屏幕
+            return 30;
+        }else{                          // 大于 800X1280
+            return 35;
+        }
+    }
 }

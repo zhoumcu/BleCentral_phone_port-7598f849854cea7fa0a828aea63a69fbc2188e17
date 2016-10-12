@@ -3,6 +3,7 @@ package com.example.sid_fu.blecentral.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -29,6 +30,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by sid-fu on 2016/5/17.
@@ -64,7 +69,7 @@ public class DeviceAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_device_list, parent, false);
             holder = new ViewHolder(convertView);
@@ -108,19 +113,32 @@ public class DeviceAdapter extends BaseAdapter {
 //            holder.btnConnect.setVisibility(View.GONE);
 //                holder.bgGround.setBackgroundColor(mContext.getResources().getColor(R.color.dark_gray));
         }
-        if(cList.get(position).getIsShare().equals("false"))
-        {
+        if(cList.get(position).getIsShare().equals("false")) {
             holder.btnBund.setEnabled(true);
             holder.btnNormal.setEnabled(true);
-        }else
-        {
+        }else {
             holder.btnBund.setEnabled(false);
             holder.btnNormal.setEnabled(false);
         }
         holder.tvTitle.setText(cList.get(position).getDeviceName());
         holder.tvContent.setText(cList.get(position).getDeviceDescripe());
-        if (cList.get(position).getImagePath() != null)
-            holder.imgIcon.setImageBitmap(BitmapUtils.getImageFromAssetsFile(mContext,"logo/"+cList.get(position).getImagePath()+".png"));
+        if (cList.get(position).getImagePath() != null){
+            Observable<Bitmap> observable = Observable.just("logo/"+cList.get(position).getImagePath()+".png")
+                    .map(new Func1<String, Bitmap>() {
+                        @Override
+                        public Bitmap call(String s) {
+                            return BitmapUtils.getImageFromAssetsFile(mContext,s);
+                        }
+                    });
+            observable.subscribeOn(Schedulers.io())
+                    .subscribe(new Action1<Bitmap>() {
+                        @Override
+                        public void call(Bitmap bitmap) {
+                            holder.imgIcon.setImageBitmap(bitmap);
+                        }
+                    });
+        }
+//            holder.imgIcon.setImageBitmap(BitmapUtils.getImageFromAssetsFile(mContext,"logo/"+cList.get(position).getImagePath()+".png"));
         holder.btnDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

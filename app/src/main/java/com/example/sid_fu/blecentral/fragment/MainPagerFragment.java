@@ -10,17 +10,15 @@ import android.os.Message;
 
 import com.example.sid_fu.blecentral.App;
 import com.example.sid_fu.blecentral.BluetoothLeService;
-import com.example.sid_fu.blecentral.ManageDevice;
-import com.example.sid_fu.blecentral.ParsedAd;
 import com.example.sid_fu.blecentral.R;
 import com.example.sid_fu.blecentral.ScanDeviceRunnable;
 import com.example.sid_fu.blecentral.db.DbHelper;
+import com.example.sid_fu.blecentral.db.DbObervable;
 import com.example.sid_fu.blecentral.db.entity.RecordData;
 import com.example.sid_fu.blecentral.helper.DataHelper;
 import com.example.sid_fu.blecentral.ui.BleData;
 import com.example.sid_fu.blecentral.ui.frame.BaseFragment;
 import com.example.sid_fu.blecentral.utils.Constants;
-import com.example.sid_fu.blecentral.utils.DataUtils;
 import com.example.sid_fu.blecentral.utils.DigitalTrans;
 import com.example.sid_fu.blecentral.utils.Logger;
 import com.example.sid_fu.blecentral.utils.SharedPreferences;
@@ -32,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
+
+import rx.functions.Action1;
 
 /**
  * Created by Administrator on 2016/6/6.
@@ -161,10 +161,8 @@ public class MainPagerFragment extends BaseFragment {
                 BluetoothDevice device = intent.getParcelableExtra("DEVICE_ADDRESS");
                 int rssi = intent.getIntExtra("RSSI",0);
                 byte[] scanRecord = intent.getByteArrayExtra("SCAN_RECORD");
-                Logger.e(":"+DataUtils.bytesToHexString(scanRecord));
-                ParsedAd ad = DataUtils.parseData(scanRecord);
                 bleIsFind(device.getAddress(),"", 3.5f);
-                bleStringToDouble(device,true,ad.datas);
+                bleStringToDouble(device,true,scanRecord);
                 if(getActivity().getResources().getBoolean(R.bool.isShowRssi))
                     showRssi(device, rssi);
                 Logger.e("收到广播数据");
@@ -205,15 +203,24 @@ public class MainPagerFragment extends BaseFragment {
         }
     }
 
-    private void bleStringToDouble(BluetoothDevice device, boolean isNotify,byte[] data) {
-        BleData bleData = DataHelper.getData(data);
-        showDataForUI(device.getAddress(),bleData);
-        handleException(device,bleData);
-        RecordData recordData = new RecordData();
-        recordData.setName(device.getAddress());
-        recordData.setData(DigitalTrans.byte2hex(data));
-        recordData.setDeviceId(mActivity.deviceId);
-        DbHelper.getInstance(getActivity()).update(mActivity.deviceId,device.getAddress(),recordData);
+    private void bleStringToDouble(final BluetoothDevice device, boolean isNotify, final byte[] data) {
+        DataHelper.getBleData(data)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<BleData>() {
+                    @Override
+                    public void call(BleData bleData) {
+                        showDataForUI(device.getAddress(),bleData);
+                        handleException(device,bleData);
+                        RecordData recordData = new RecordData();
+                        recordData.setName(device.getAddress());
+                        recordData.setData(bleData.getData());
+                        recordData.setDeviceId(mActivity.deviceId);
+                        DbObervable.getInstance(getActivity())
+                                .updateRecord(mActivity.deviceId,device.getAddress(),recordData);
+                    }
+                });
+//        BleData bleData = DataHelper.getData(data);
     }
 
     private void bleStringToDouble(RecordData recordData) {
@@ -266,43 +273,13 @@ public class MainPagerFragment extends BaseFragment {
         }
     }
     private void handleException(BleData date, String str) {
-        StringBuffer buffer = new StringBuffer();
-        int state = 0;
-        float maxPress ,minPress,maxTemp;
-        setUnitTextSize();
-        if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Bar")) {
-            maxPress = 3.20f;
-            minPress = 1.800f;
-        }else if(SharedPreferences.getInstance().getString(Constants.PRESSUER_DW, "Bar").equals("Kpa")) {
-            maxPress = 3.20f*102;
-            minPress = 1.800f*102;
-        }else{
-            maxPress = 3.20f*14.5f;
-            minPress = 1.800f*14.5f;
-        }
-        if(SharedPreferences.getInstance().getString(Constants.TEMP_DW, "℃").equals("℃")) {
-            maxTemp = 65;
+        String errorState = date.getErrorState();
+        if (date.isError()) {
+            bleIsException(str,errorState);//高压
+            Logger.e("handleException","异常");
         }else {
-            maxTemp = (int)(65*1.80f)+32;
-        }
-        Logger.e("maxPress"+maxPress+"minPress"+minPress+"maxTemp"+maxTemp);
-        buffer.append(date.getPress() > maxPress ? "高压" + " " : "");
-        buffer.append(date.getPress() < minPress ? "低压" + " " : "");
-        buffer.append(date.getTemp() > maxTemp ? "高温" + " " : "");
-//        buffer.append(date.getTemp() < 20 ? "低温" + " " : "");
-        ManageDevice.status[] statusData = ManageDevice.status.values();
-        //状态检测
-        if(date.getStatus()==8||date.getStatus()==0) {
-
-        }else{
-            buffer.append(statusData[date.getStatus()] + " ");
-        }
-        if (buffer.toString().contains("快漏气")||date.getPress() > maxPress || date.getPress() < minPress || date.getTemp() >= maxTemp ? true: false) {
-            //高压
-            bleIsException(str,buffer.toString());
-        }else {
-            //正常
-            bleIsFind(str,buffer.toString(),date.getVoltage());
+            bleIsFind(str,errorState,date.getVoltage());//正常
+            Logger.d("handleException","正常");
         }
     }
 

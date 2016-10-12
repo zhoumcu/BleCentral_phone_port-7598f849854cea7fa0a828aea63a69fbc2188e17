@@ -507,8 +507,7 @@ public class MainPagerFragment1 extends Fragment implements View.OnClickListener
             mActivity.rightBDevice.writeChar6(Constants.RSSI_ON);
         }
     }
-    private  void onFailed(BluetoothDevice device)
-    {
+    private  void onFailed(BluetoothDevice device) {
         //记录因其他原因造成蓝牙断开，实现重连机制
         if(mActivity.leftFDevice!=null&&mActivity.leftFDevice.getDevice().equals(device))
         {
